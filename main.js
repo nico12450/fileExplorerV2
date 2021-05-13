@@ -53,7 +53,20 @@ ipc.on('getFiles', (event, data) => {
     // was found, then files is ["**/*.js"]
     // er is an error object or null.
     event.sender.send('files', files);
-  })
+  });
+
+});
+
+ipc.on('goToDirectory', (event,directory) => {
+
+  process.chdir(directory);
+  console.log(directory);
+
+  glob("*", function (er, files) {
+
+    event.sender.send('files', files);
+
+  });
 
 });
 

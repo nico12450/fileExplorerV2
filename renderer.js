@@ -12,8 +12,15 @@ ipc.on('files', (event, files) => {
         // console.log(element);
         let fileElement = document.createElement("li");
         fileElement.append(document.createTextNode(fileName));
-        fileElement.setAttribute("value", fileName)
+        fileElement.setAttribute("onClick","clickOnFile(this.innerHTML)");
         document.getElementById("files").append(fileElement);
     });
 
 });
+
+function clickOnFile(fileName){
+
+    document.getElementById("files").innerHTML = "<li onClick='clickOnFile(this.innerHTML)'>../</li>";
+    ipc.send('goToDirectory',fileName);
+
+}
