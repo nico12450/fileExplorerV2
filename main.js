@@ -59,14 +59,21 @@ ipc.on('getFiles', (event, data) => {
 
 ipc.on('goToDirectory', (event,directory) => {
 
-  process.chdir(directory);
-  console.log(directory);
+  try {
 
-  glob("*", function (er, files) {
+    process.chdir(directory);
 
-    event.sender.send('files', files);
+    glob("*", function (er, files) {
 
-  });
+      event.sender.send('files', files);
+  
+    });
+    
+  } catch (error) {
+
+    console.log(error);
+    
+  }
 
 });
 

@@ -8,6 +8,8 @@ ipc.send('getFiles');
 
 ipc.on('files', (event, files) => {
 
+    clearFiles();
+
     files.forEach(fileName => {
         // console.log(element);
         let fileElement = document.createElement("li");
@@ -20,7 +22,12 @@ ipc.on('files', (event, files) => {
 
 function clickOnFile(fileName){
 
-    document.getElementById("files").innerHTML = "<li onClick='clickOnFile(this.innerHTML)'>../</li>";
     ipc.send('goToDirectory',fileName);
+
+}
+
+function clearFiles(){
+
+    document.getElementById("files").innerHTML = "<li onClick='clickOnFile(this.innerHTML)'>../</li>";
 
 }
