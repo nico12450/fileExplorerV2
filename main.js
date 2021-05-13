@@ -47,13 +47,7 @@ const ipc = electron.ipcMain;
 
 ipc.on('getFiles', (event, data) => {
 
-  glob("*", function (er, files) {
-    // files is an array of filenames.
-    // If the `nonull` option is set, and nothing
-    // was found, then files is ["**/*.js"]
-    // er is an error object or null.
-    event.sender.send('files', files);
-  });
+  sendFileList(event);
 
 });
 
@@ -62,12 +56,7 @@ ipc.on('goToDirectory', (event,directory) => {
   try {
 
     process.chdir(directory);
-
-    glob("*", function (er, files) {
-
-      event.sender.send('files', files);
-  
-    });
+    sendFileList(event);
     
   } catch (error) {
 
@@ -76,4 +65,14 @@ ipc.on('goToDirectory', (event,directory) => {
   }
 
 });
+
+function sendFileList(event){
+  glob("*", {dot: true} ,function (er, files) {
+    // files is an array of filenames.
+    // If the `nonull` option is set, and nothing
+    // was found, then files is ["**/*.js"]
+    // er is an error object or null.
+    event.sender.send('files', files);
+  });
+}
 
