@@ -6,16 +6,20 @@ const ipc = require('electron').ipcRenderer;
 
 ipc.send('getFiles');
 
+ipc.on('clear',() => {clearFiles()});
+
+ipc.on('directories', (event, directories) => {
+
+    directories.forEach(directoryName => {
+        addDirectoryElement(directoryName);
+    });
+
+});
+
 ipc.on('files', (event, files) => {
 
-    clearFiles();
-
     files.forEach(fileName => {
-        // console.log(element);
-        let fileElement = document.createElement("li");
-        fileElement.append(document.createTextNode(fileName));
-        fileElement.setAttribute("onClick","clickOnFile(this.innerHTML)");
-        document.getElementById("files").append(fileElement);
+        addFileElement(fileName);
     });
 
 });
@@ -28,6 +32,27 @@ function clickOnFile(fileName){
 
 function clearFiles(){
 
-    document.getElementById("files").innerHTML = "<li onClick='clickOnFile(this.innerHTML)'>../</li>";
+    document.getElementById("files").innerHTML = "";
+    addDirectoryElement("../");
+
+}
+
+function addDirectoryElement(name){
+
+    let directoryWrapperElement = document.createElement("a");
+    directoryWrapperElement.setAttribute("href","#");
+    let directoryElement = document.createElement("li");
+    directoryElement.append(document.createTextNode(name));
+    directoryElement.setAttribute("onClick","clickOnFile(this.innerHTML)");
+    directoryWrapperElement.append(directoryElement);
+    document.getElementById("files").append(directoryWrapperElement);
+
+}
+
+function addFileElement(name){
+
+    let fileElement = document.createElement("li");
+    fileElement.append(document.createTextNode(name));
+    document.getElementById("files").append(fileElement);
 
 }

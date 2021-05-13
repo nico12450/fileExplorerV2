@@ -1,5 +1,6 @@
 const electron = require('electron');
-const glob = require("glob");
+// const glob = require("glob");
+const fs = require('fs');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
@@ -66,13 +67,33 @@ ipc.on('goToDirectory', (event,directory) => {
 
 });
 
-function sendFileList(event){
-  glob("*", {dot: true} ,function (er, files) {
-    // files is an array of filenames.
-    // If the `nonull` option is set, and nothing
-    // was found, then files is ["**/*.js"]
-    // er is an error object or null.
-    event.sender.send('files', files);
-  });
-}
+// function sendFileList(event){
+//   glob("*", {dot: true} ,function (er, files) {
+//     event.sender.send('files', files);
+//   });
+// }
 
+function sendFileList(event){
+
+  event.sender.send('clear');
+
+  fs.readdir('./', { withFileTypes: true }, (err, files) => {
+
+    // console.log("\nCurrent directory files:");
+
+    // if (err)
+    //   console.log(err);
+    // else {
+    //   files.forEach(file => {
+    //     console.log(file);
+    //   })
+    // }
+
+    const directories = files.filter(file => file.isDirectory()).map(file => file.name);
+    const filesElements = files.filter(file => !file.isDirectory()).map(file => file.name);
+    event.sender.send('directories',directories);
+    event.sender.send('files',filesElements);
+
+  });
+
+}
