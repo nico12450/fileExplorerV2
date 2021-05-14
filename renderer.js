@@ -1,14 +1,13 @@
 const ipc = require('electron').ipcRenderer;
 
-// document.getElementById('ipc').addEventListener('click', () => {
-//     ipc.send('log-error');
-// });
+let currentPath = '';
 
 ipc.send('getFiles');
 
 ipc.on('currentPath', (event, path) => {
 
-    displayPath(path);
+    currentPath = path;
+    displayPath();
 
 });
 
@@ -64,23 +63,28 @@ function addFileElement(name){
 
 }
 
-function displayPath(path){
+function displayPath(){
 
-    let pathList = path.split('\\');
+    let pathList = currentPath.split('\\');
     let navbar = document.getElementById('navbar');
+    let associatedPath = '';
     navbar.innerHTML = "";
 
     for(let i = 0; i<pathList.length; i++){
 
+        associatedPath += pathList[i]
         let navbarItem = document.createElement("li");
 
         if(i<pathList.length-1){
             navbarItem.setAttribute("class","breadcrumb-item");
+            associatedPath += '/';
         }
         else{
             navbarItem.setAttribute("class","breadcrumb-item active");
             navbarItem.setAttribute("aria-current", "page");
         }
+
+        navbarItem.setAttribute("onClick","goToPath('" + associatedPath + "')");
 
         let navBarTextElement = document.createElement("a");
         navBarTextElement.setAttribute("href","#");
@@ -91,4 +95,8 @@ function displayPath(path){
 
     }
 
+}
+
+function goToPath(path){
+    ipc.send('goToPath', path);
 }

@@ -28,7 +28,7 @@ function createWindow () {
 
   // mainWindow.maximize();
   mainWindow.show();
-  // mainWindow.setMenu(null);
+  mainWindow.setMenu(null);
 }
 
 app.on('ready', createWindow);
@@ -68,11 +68,22 @@ ipc.on('goToDirectory', (event,directory) => {
 
 });
 
-// function sendFileList(event){
-//   glob("*", {dot: true} ,function (er, files) {
-//     event.sender.send('files', files);
-//   });
-// }
+ipc.on('goToPath', (event, path) => {
+
+  try{
+
+    process.chdir(path);
+    sendFileList(event);
+
+  }
+  catch (error){
+
+    console.log(error);
+
+  }
+
+
+});
 
 function sendFileList(event){
 
@@ -80,16 +91,6 @@ function sendFileList(event){
   event.sender.send('currentPath', process.cwd());
 
   fs.readdir('./', { withFileTypes: true }, (err, files) => {
-
-    // console.log("\nCurrent directory files:");
-
-    // if (err)
-    //   console.log(err);
-    // else {
-    //   files.forEach(file => {
-    //     console.log(file);
-    //   })
-    // }
 
     const directories = files.filter(file => file.isDirectory()).map(file => file.name);
     const filesElements = files.filter(file => !file.isDirectory()).map(file => file.name);
