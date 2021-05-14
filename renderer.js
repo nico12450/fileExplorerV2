@@ -39,19 +39,20 @@ function clearFiles(){
 
 function addDirectoryElement(name){
 
-    let directoryWrapperElement = document.createElement("a");
-    directoryWrapperElement.setAttribute("href","#");
-    let directoryElement = document.createElement("li");
+    let directoryElement = document.createElement("a");
+    directoryElement.setAttribute("href","#");
+    directoryElement.setAttribute("class","list-group-item list-group-item-action list-group-item-primary");
     directoryElement.append(document.createTextNode(name));
     directoryElement.setAttribute("onClick","clickOnFile(this.innerHTML)");
-    directoryWrapperElement.append(directoryElement);
-    document.getElementById("files").append(directoryWrapperElement);
+    document.getElementById("files").append(directoryElement);
 
 }
 
 function addFileElement(name){
 
-    let fileElement = document.createElement("li");
+    let fileElement = document.createElement("a");
+    fileElement.setAttribute("href","#");
+    fileElement.setAttribute("class","list-group-item list-group-item-action list-group-item-light");
     fileElement.append(document.createTextNode(name));
     document.getElementById("files").append(fileElement);
 
