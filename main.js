@@ -9,8 +9,8 @@ let mainWindow;
 function createWindow () {
 
   mainWindow = new BrowserWindow({
-    width: 1800,
-    height: 1200,
+    width: 1000,
+    height: 800,
     fullscreen: false,
     frame: true,
     show: false,
@@ -26,8 +26,9 @@ function createWindow () {
     mainWindow = null;
   })
 
-  mainWindow.maximize();
+  // mainWindow.maximize();
   mainWindow.show();
+  // mainWindow.setMenu(null);
 }
 
 app.on('ready', createWindow);
@@ -76,6 +77,7 @@ ipc.on('goToDirectory', (event,directory) => {
 function sendFileList(event){
 
   event.sender.send('clear');
+  event.sender.send('currentPath', process.cwd());
 
   fs.readdir('./', { withFileTypes: true }, (err, files) => {
 

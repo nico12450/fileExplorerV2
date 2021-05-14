@@ -4,14 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>File Explorer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 </head>
 <body>
-    <h1>Explorateur de fichiers</h1>
-    <!-- <button id="ipc">test</button> -->
-    <!-- <ul id="files"></ul> -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" id = 'navbar'>
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+    </nav>
     <div class="list-group" id="files"></div>
 </body>
 <script src="./renderer.js"></script>
+<style>
+    .breadcrumb{
+        background-color: lightgray;
+    }
+</style>
 </html>

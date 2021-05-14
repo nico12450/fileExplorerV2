@@ -6,6 +6,12 @@ const ipc = require('electron').ipcRenderer;
 
 ipc.send('getFiles');
 
+ipc.on('currentPath', (event, path) => {
+
+    displayPath(path);
+
+});
+
 ipc.on('clear',() => {clearFiles()});
 
 ipc.on('directories', (event, directories) => {
@@ -55,5 +61,34 @@ function addFileElement(name){
     fileElement.setAttribute("class","list-group-item list-group-item-action list-group-item-light");
     fileElement.append(document.createTextNode(name));
     document.getElementById("files").append(fileElement);
+
+}
+
+function displayPath(path){
+
+    let pathList = path.split('\\');
+    let navbar = document.getElementById('navbar');
+    navbar.innerHTML = "";
+
+    for(let i = 0; i<pathList.length; i++){
+
+        let navbarItem = document.createElement("li");
+
+        if(i<pathList.length-1){
+            navbarItem.setAttribute("class","breadcrumb-item");
+        }
+        else{
+            navbarItem.setAttribute("class","breadcrumb-item active");
+            navbarItem.setAttribute("aria-current", "page");
+        }
+
+        let navBarTextElement = document.createElement("a");
+        navBarTextElement.setAttribute("href","#");
+        navBarTextElement.append(document.createTextNode(pathList[i]));
+
+        navbarItem.append(navBarTextElement);
+        navbar.append(navbarItem);
+
+    }
 
 }
