@@ -15,50 +15,90 @@ ipc.on('clear',() => {clearFiles()});
 
 ipc.on('directories', (event, directories) => {
 
-    directories.forEach(directoryName => {
-        addDirectoryElement(directoryName);
+    directories.forEach(directory => {
+        addDirectoryElement(directory);
     });
 
 });
 
 ipc.on('files', (event, files) => {
 
-    files.forEach(fileName => {
-        addFileElement(fileName);
+    files.forEach(file => {
+        addFileElement(file);
     });
 
 });
 
-function clickOnFile(fileName){
+function clickOnDirectory(fileName){
 
     ipc.send('goToDirectory',fileName);
+
+}
+
+function clickOnFile(fileName){
+
+    ipc.send('clickOnFile',fileName);
 
 }
 
 function clearFiles(){
 
     document.getElementById("files").innerHTML = "";
-    addDirectoryElement("../");
+    addDirectoryElement({name: "../"});
 
 }
 
-function addDirectoryElement(name){
+function addDirectoryElement(directory){
+
+    const name = directory.name;
 
     let directoryElement = document.createElement("a");
     directoryElement.setAttribute("href","#");
-    directoryElement.setAttribute("class","list-group-item list-group-item-action list-group-item-primary");
+
+    if(name != "../"){
+
+        directoryElement.setAttribute("class","list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-primary");
+
+    }
+
+    else{
+
+        directoryElement.setAttribute("class","list-group-item list-group-item-action list-group-item-success");
+
+    }
+
     directoryElement.append(document.createTextNode(name));
-    directoryElement.setAttribute("onClick","clickOnFile(this.innerHTML)");
+    directoryElement.setAttribute("onClick","clickOnDirectory('" + name + "')");
+
+    if(name != "../"){
+
+        const date = directory.date;
+
+        let badge = document.createElement("span");
+        badge.setAttribute("class","badge bg-primary rounded-pill");
+        badge.append(document.createTextNode(date));
+        directoryElement.append(badge);
+
+    }
+
     document.getElementById("files").append(directoryElement);
 
 }
 
-function addFileElement(name){
+function addFileElement(file){
+
+    const name = file.name;
+    const date = file.date;
 
     let fileElement = document.createElement("a");
     fileElement.setAttribute("href","#");
-    fileElement.setAttribute("class","list-group-item list-group-item-action list-group-item-light");
+    fileElement.setAttribute("class","list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-light");
     fileElement.append(document.createTextNode(name));
+    // fileElement.setAttribute("onClick","clickOnFile('" + name + "')");
+    let badge = document.createElement("span");
+    badge.setAttribute("class","badge bg-primary rounded-pill");
+    badge.append(document.createTextNode(date));
+    fileElement.append(badge);
     document.getElementById("files").append(fileElement);
 
 }

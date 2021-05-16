@@ -28,7 +28,7 @@ function createWindow () {
 
   // mainWindow.maximize();
   mainWindow.show();
-  mainWindow.setMenu(null);
+  // mainWindow.setMenu(null);
 }
 
 app.on('ready', createWindow);
@@ -85,6 +85,12 @@ ipc.on('goToPath', (event, path) => {
 
 });
 
+// ipc.on('clickOnFile', (event, fileName) => {
+
+//   console.log(getCreationDate(fileName));
+
+// });
+
 function sendFileList(event){
 
   event.sender.send('clear');
@@ -92,11 +98,23 @@ function sendFileList(event){
 
   fs.readdir('./', { withFileTypes: true }, (err, files) => {
 
-    const directories = files.filter(file => file.isDirectory()).map(file => file.name);
-    const filesElements = files.filter(file => !file.isDirectory()).map(file => file.name);
+    const directories = files.filter(file => file.isDirectory()).map(file => {return {name: file.name, date: getCreationDate(file.name)}});
+    const filesElements = files.filter(file => !file.isDirectory()).map(file => {return {name: file.name, date: getCreationDate(file.name)}});
     event.sender.send('directories',directories);
     event.sender.send('files',filesElements);
 
   });
 
+}
+
+function getFileInfos(fileName){
+  return fs.statSync('./'+fileName);
+}
+
+function getCreationDate(fileName){
+
+  const fileInfos = getFileInfos(fileName);
+  const fileDate = fileInfos.birthtime;
+
+  return fileDate.toLocaleDateString() + " " + fileDate.toLocaleTimeString();
 }
