@@ -44,7 +44,18 @@ function clickOnFile(fileName){
 function clearFiles(){
 
     document.getElementById("files").innerHTML = "";
-    addDirectoryElement({name: "../"});
+    addReturnElement();
+
+}
+
+function addReturnElement(){
+
+    let returnElement = document.createElement("a");
+    returnElement.setAttribute("href","#");
+    returnElement.setAttribute("class","list-group-item list-group-item-action list-group-item-success");
+    returnElement.append(document.createTextNode('../'));
+    returnElement.setAttribute("onClick","clickOnDirectory('../')");
+    document.getElementById("files").append(returnElement);
 
 }
 

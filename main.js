@@ -28,7 +28,7 @@ function createWindow () {
 
   // mainWindow.maximize();
   mainWindow.show();
-  // mainWindow.setMenu(null);
+  mainWindow.setMenu(null);
 }
 
 app.on('ready', createWindow);
