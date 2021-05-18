@@ -62,35 +62,19 @@ function addReturnElement(){
 function addDirectoryElement(directory){
 
     const name = directory.name;
+    const date = directory.date;
 
     let directoryElement = document.createElement("a");
     directoryElement.setAttribute("href","#");
-
-    if(name != "../"){
-
-        directoryElement.setAttribute("class","list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-primary");
-
-    }
-
-    else{
-
-        directoryElement.setAttribute("class","list-group-item list-group-item-action list-group-item-success");
-
-    }
-
+    directoryElement.setAttribute("class","list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-primary");
     directoryElement.append(document.createTextNode(name));
     directoryElement.setAttribute("onClick","clickOnDirectory('" + name + "')");
 
-    if(name != "../"){
+    let badge = document.createElement("span");
+    badge.setAttribute("class","badge bg-primary rounded-pill");
+    badge.append(document.createTextNode(date));
 
-        const date = directory.date;
-
-        let badge = document.createElement("span");
-        badge.setAttribute("class","badge bg-primary rounded-pill");
-        badge.append(document.createTextNode(date));
-        directoryElement.append(badge);
-
-    }
+    directoryElement.append(badge);
 
     document.getElementById("files").append(directoryElement);
 
