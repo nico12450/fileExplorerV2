@@ -87,7 +87,7 @@ ipc.on('goToPath', (event, path) => {
 
 // ipc.on('clickOnFile', (event, fileName) => {
 
-//   console.log(getCreationDate(fileName));
+//   console.log(getFileSize(fileName));
 
 // });
 
@@ -99,7 +99,7 @@ function sendFileList(event){
   fs.readdir('./', { withFileTypes: true }, (err, files) => {
 
     const directories = files.filter(file => file.isDirectory()).map(file => {return {name: file.name, date: getCreationDate(file.name)}});
-    const filesElements = files.filter(file => !file.isDirectory()).map(file => {return {name: file.name, date: getCreationDate(file.name)}});
+    const filesElements = files.filter(file => !file.isDirectory()).map(file => {return {name: file.name, date: getCreationDate(file.name), size: getFileSize(file.name)}});
     event.sender.send('directories',directories);
     event.sender.send('files',filesElements);
 
@@ -117,4 +117,34 @@ function getCreationDate(fileName){
   const fileDate = fileInfos.birthtime;
 
   return fileDate.toLocaleDateString() + " " + fileDate.toLocaleTimeString();
+}
+
+function getFileSize(fileName){
+
+  const fileInfos = getFileInfos(fileName);
+  const fileSize = fileInfos.size;
+
+  if (fileSize < 1024){
+
+    return fileSize + ' octets';
+
+  }
+  else if(fileSize < 1024*1024){
+
+    return Math.round(fileSize / 1024) + ' Ko';
+
+  }
+  else if(fileSize < 1024*1024*1024){
+
+    return Math.round(fileSize / (1024*1024)) + ' Mo';
+
+  }
+  else if(fileSize < 1024*1024*1024*1024){
+
+    return Math.round(fileSize / (1024*1024*1024)) + ' Go';
+
+  }
+
+  return Math.round(fileSize / (1024*1024*1024*1024)) + ' To';
+
 }

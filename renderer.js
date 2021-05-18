@@ -84,16 +84,34 @@ function addFileElement(file){
 
     const name = file.name;
     const date = file.date;
+    const size = file.size;
 
     let fileElement = document.createElement("a");
     fileElement.setAttribute("href","#");
-    fileElement.setAttribute("class","list-group-item d-flex justify-content-between align-items-center list-group-item-action list-group-item-light");
-    fileElement.append(document.createTextNode(name));
+    fileElement.setAttribute("class","list-group-item d-flex justify-content-between list-group-item-action list-group-item-light");
+    let textElement = document.createElement("div");
+    textElement.setAttribute("class","mr-auto p-2");
+    textElement.append(document.createTextNode(name));
+    fileElement.append(textElement);
     // fileElement.setAttribute("onClick","clickOnFile('" + name + "')");
+    let badgeWrapperElement = document.createElement("div");
+    badgeWrapperElement.setAttribute("class","p-2");
+
     let badge = document.createElement("span");
     badge.setAttribute("class","badge bg-primary rounded-pill");
     badge.append(document.createTextNode(date));
-    fileElement.append(badge);
+
+    badgeWrapperElement.append(badge);
+    badgeWrapperElement.append(document.createTextNode(' '));
+
+    badge = document.createElement("span");
+    badge.setAttribute("class","badge bg-success rounded-pill");
+    badge.append(document.createTextNode(size));
+
+    badgeWrapperElement.append(badge);
+
+    fileElement.append(badgeWrapperElement);
+    
     document.getElementById("files").append(fileElement);
 
 }
